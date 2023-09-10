@@ -107,8 +107,10 @@
 		</Stepper>
 	{:else}
 		Your link is:
-		{`${PUBLIC_API_URL}/lessons/${classId}/ics${
-			type !== undefined ? `?${type}=${subjects.join(',')}` : ''
-		}`}
+		<span class="font-semibold underline">
+			{`${PUBLIC_API_URL}/lessons/${classId}/ics${
+				type !== undefined ? `?${type}=${encodeURIComponent(subjects.join(','))}` : ''
+			}`}
+		</span>
 	{/if}
 </div>
