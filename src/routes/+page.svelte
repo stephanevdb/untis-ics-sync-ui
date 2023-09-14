@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { PUBLIC_API_URL } from '$env/static/public';
 	import { GET, type Lesson, type Metadata } from '$lib/api';
+	import Alert from '$lib/components/Alert.svelte';
 	import { ProgressRadial, Step, Stepper } from '@skeletonlabs/skeleton';
 
 	let classId: number | undefined;
@@ -20,6 +21,11 @@
 		);
 		return out;
 	};
+
+	const getUrl = () =>
+		`${PUBLIC_API_URL}/lessons/${classId}/ics${
+			type !== undefined ? `?${type}=${encodeURIComponent(subjects.join(','))}` : ''
+		}`;
 </script>
 
 <div class="container card mx-auto p-6">
@@ -29,6 +35,7 @@
 				<svelte:fragment slot="header">Step 1: Select class</svelte:fragment>
 				Select the class you want to subscribe to. If you're currently partaking in multiple classes
 				at once, do this for each class individually.
+				<hr class="mt-3" />
 
 				{#await classesPromise}
 					<div class="flex justify-center my-3">
@@ -38,12 +45,13 @@
 					{#if error}
 						Failed loading classes: {error}.
 					{/if}
-					<hr class="mt-3" />
 					<select class="select mt-3 px-4" bind:value={classId}>
 						{#each data.sort((k1, k2) => k1.name.localeCompare(k2.name)) as kl}
 							<option value={kl.id}>{kl.name} [{kl.id}]</option>
 						{/each}
 					</select>
+				{:catch error}
+					<Alert message={`Something went wrong, please try again later. (${error})`} />
 				{/await}
 			</Step>
 			<Step>
@@ -110,11 +118,24 @@
 			</Step>
 		</Stepper>
 	{:else}
-		Your link is:
-		<span class="font-semibold underline">
-			{`${PUBLIC_API_URL}/lessons/${classId}/ics${
-				type !== undefined ? `?${type}=${encodeURIComponent(subjects.join(','))}` : ''
-			}`}
-		</span>
+		That's it! Use the link below to subscribe to your personalized calendar.
+		<div class="input-group input-group-divider grid-cols-[auto_1fr_auto] my-2">
+			<div class="input-group-shim">ical://</div>
+			<input type="search" readonly value={getUrl()} />
+			<button
+				class="variant-filled-primary"
+				on:click={() => navigator.clipboard.writeText(getUrl())}>Copy</button
+			>
+		</div>
+
+		<button
+			class="btn variant-filled-primary"
+			on:click={() => {
+				classId = undefined;
+				type = undefined;
+				subjects = [];
+				finished = false;
+			}}>Need another class?</button
+		>
 	{/if}
 </div>
