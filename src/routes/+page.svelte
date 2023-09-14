@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { PUBLIC_API_URL } from '$env/static/public';
 	import { GET, type Lesson, type Metadata } from '$lib/api';
-	import { Step, Stepper } from '@skeletonlabs/skeleton';
+	import { ProgressRadial, Step, Stepper } from '@skeletonlabs/skeleton';
 
 	let classId: number | undefined;
 	let type: 'includedSubjects' | 'excludedSubjects' | undefined;
@@ -31,7 +31,9 @@
 				at once, do this for each class individually.
 
 				{#await classesPromise}
-					Loading classes...
+					<div class="flex justify-center my-3">
+						<ProgressRadial width="w-16" meter="stroke-primary-500" track="stroke-primary-500/30" />
+					</div>
 				{:then { data, error }}
 					{#if error}
 						Failed loading classes: {error}.
@@ -47,45 +49,47 @@
 			<Step>
 				<svelte:fragment slot="header">Step 2: Select subjects (optional)</svelte:fragment>
 				Only following a few subjects of a class? Feel free to include or exclude them here.
+				<div class="mt-3">
+					<label class="flex items-center space-x-2">
+						<input
+							class="radio"
+							type="radio"
+							name="type"
+							checked={type === undefined}
+							on:change={() => (type = undefined)}
+						/>
+						<p>Don't include or exclude any classes.</p>
+					</label>
+					<label class="flex items-center space-x-2">
+						<input
+							class="radio"
+							type="radio"
+							name="type"
+							checked={type === 'excludedSubjects'}
+							on:change={() => (type = 'excludedSubjects')}
+						/>
+						<p>Exclude the classes that I select below.</p>
+					</label>
+					<label class="flex items-center space-x-2">
+						<input
+							class="radio"
+							type="radio"
+							name="type"
+							checked={type === 'includedSubjects'}
+							on:change={() => (type = 'includedSubjects')}
+						/>
+						<p>Include the classes that I select below.</p>
+					</label>
+				</div>
+				<hr />
 				{#await GET('/lessons/{classId}', { params: { path: { classId: classId || 0 } } })}
-					Fetching lessons to come, this may take a while...
+					<div class="flex justify-center my-3">
+						<ProgressRadial width="w-16" meter="stroke-primary-500" track="stroke-primary-500/30" />
+					</div>
 				{:then { data, error }}
 					{#if error}
 						No lessons found in range. Are you sure this class exists and is active?
 					{:else}
-						<div class="mt-3">
-							<label class="flex items-center space-x-2">
-								<input
-									class="radio"
-									type="radio"
-									name="type"
-									checked={type === undefined}
-									on:change={() => (type = undefined)}
-								/>
-								<p>Don't include or exclude any classes.</p>
-							</label>
-							<label class="flex items-center space-x-2">
-								<input
-									class="radio"
-									type="radio"
-									name="type"
-									checked={type === 'excludedSubjects'}
-									on:change={() => (type = 'excludedSubjects')}
-								/>
-								<p>Exclude the classes that I select below.</p>
-							</label>
-							<label class="flex items-center space-x-2">
-								<input
-									class="radio"
-									type="radio"
-									name="type"
-									checked={type === 'includedSubjects'}
-									on:change={() => (type = 'includedSubjects')}
-								/>
-								<p>Include the classes that I select below.</p>
-							</label>
-						</div>
-						<hr />
 						<div class="mt-3 space-y-3">
 							{#each getSubjects(data) as su}
 								<label class="flex items-center space-x-2">
