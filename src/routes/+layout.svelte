@@ -6,6 +6,10 @@
 	import { AppBar, AppShell, LightSwitch, Modal, Toast } from '@skeletonlabs/skeleton';
 </script>
 
+<svelte:head>
+	<title>Untis ICS Sync</title>
+</svelte:head>
+
 <AppShell>
 	<svelte:fragment slot="header">
 		<AppBar>
