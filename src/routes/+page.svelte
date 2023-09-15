@@ -121,15 +121,15 @@
 		That's it! Use the link below to subscribe to your personalized calendar.
 		<div class="input-group input-group-divider grid-cols-[auto_1fr_auto] my-2">
 			<div class="input-group-shim">ical://</div>
-			<input type="search" readonly value={getUrl()} />
+			<input type="text" readonly value={getUrl()} />
 			<button
-				class="variant-filled-primary"
+				class="variant-filled-primary w-16"
 				on:click={() => navigator.clipboard.writeText(getUrl())}>Copy</button
 			>
 		</div>
 
 		<button
-			class="btn variant-filled-primary"
+			class="btn variant-filled-primary w-full"
 			on:click={() => {
 				classId = undefined;
 				type = undefined;
