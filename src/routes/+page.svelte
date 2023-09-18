@@ -35,6 +35,8 @@
 		if (params.toString()) return url.concat('?', params.toString());
 		return url;
 	};
+
+	const getHolidayUrl = () => `${PUBLIC_API_URL}/holidays`;
 </script>
 
 <div class="container card mx-auto p-6">
@@ -176,12 +178,21 @@
 		</Stepper>
 	{:else}
 		That's it! Use the link below to subscribe to your personalized calendar.
-		<div class="input-group input-group-divider grid-cols-[auto_1fr_auto] my-2">
+		<div class="input-group input-group-divider grid-cols-[auto_1fr_auto] mt-2 mb-4">
 			<div class="input-group-shim">ical://</div>
 			<input type="text" readonly value={getUrl()} />
 			<button
 				class="variant-filled-primary w-16"
 				on:click={() => navigator.clipboard.writeText(getUrl())}>Copy</button
+			>
+		</div>
+		Looking for a holiday calendar? Use the one below to get automatically updated future holidays.
+		<div class="input-group input-group-divider grid-cols-[auto_1fr_auto] my-2">
+			<div class="input-group-shim">ical://</div>
+			<input type="text" readonly value={getHolidayUrl()} />
+			<button
+				class="variant-filled-primary w-16"
+				on:click={() => navigator.clipboard.writeText(getHolidayUrl())}>Copy</button
 			>
 		</div>
 
