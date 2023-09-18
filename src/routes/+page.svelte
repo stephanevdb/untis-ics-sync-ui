@@ -8,6 +8,8 @@
 	let type: 'includedSubjects' | 'excludedSubjects' | undefined;
 	let subjects: number[] = [];
 	let offset = 0;
+	let newAlarm = 0;
+	let alarms: number[] = [];
 	let finished = false;
 
 	const classesPromise = GET('/classes', {});
@@ -27,6 +29,7 @@
 		const params = new URLSearchParams();
 		if (type) params.append(type, subjects.join(','));
 		if (offset) params.append('offset', offset.toString());
+		if (alarms) params.append('alarms', alarms.join(','));
 
 		const url = `${PUBLIC_API_URL}/lessons/${classId}/ics`;
 		if (params.toString()) return url.concat('?', params.toString());
@@ -137,6 +140,39 @@
 					<input class="input mt-3 px-4" type="number" bind:value={offset} />
 				</label>
 			</Step>
+			<Step>
+				<svelte:fragment slot="header">Step 4: Alarms (optional)</svelte:fragment>
+				Want to be notified before each lesson? Enter the desired amount of minutes before each subject
+				below and make sure "remove alarms" is disabled in your preferred calendar.
+				<hr class="mt-3" />
+
+				<label class="label">
+					<span>Time before (in minutes, positive)</span>
+					<div class="flex mt-3 gap-3">
+						<input class="input px-4" type="number" min={0} bind:value={newAlarm} />
+						<button
+							class="btn variant-filled-primary"
+							on:click={() => {
+								alarms.push(newAlarm);
+								alarms = alarms;
+								newAlarm = 0;
+							}}>Add</button
+						>
+					</div>
+				</label>
+				{#each alarms as alarm}
+					<div class="flex">
+						<span class="mr-auto self-center">{alarm} minutes before all events...</span>
+						<button
+							class="btn variant-ghost-primary"
+							on:click={() => {
+								alarms.splice(alarms.indexOf(alarm), 1);
+								alarms = alarms;
+							}}>Delete</button
+						>
+					</div>
+				{/each}
+			</Step>
 		</Stepper>
 	{:else}
 		That's it! Use the link below to subscribe to your personalized calendar.
@@ -156,6 +192,8 @@
 				type = undefined;
 				subjects = [];
 				offset = 0;
+				newAlarm = 0;
+				alarms = [];
 				finished = false;
 			}}>Need another class?</button
 		>
