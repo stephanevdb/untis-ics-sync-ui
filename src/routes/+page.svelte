@@ -29,7 +29,7 @@
 		const params = new URLSearchParams();
 		if (type) params.append(type, subjects.join(','));
 		if (offset) params.append('offset', offset.toString());
-		if (alarms) params.append('alarms', alarms.join(','));
+		if (alarms.length) params.append('alarms', alarms.join(','));
 
 		const url = `${PUBLIC_API_URL}/lessons/${classId}/ics`;
 		if (params.toString()) return url.concat('?', params.toString());
