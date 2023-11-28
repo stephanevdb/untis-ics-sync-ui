@@ -22,10 +22,12 @@
 		<ProgressRadial width="w-16" meter="stroke-primary-500" track="stroke-primary-500/30" />
 	</div>
 {:then { data, error }}
-	{#if error}
-		No lessons found in range. Are you sure this class exists and is active?
-	{:else}
-		<div class="mt-3 space-y-3">
+	<div class="mt-3 space-y-3">
+		{#if error}
+			No lessons returned by the server.
+		{:else if !data.length}
+			No lessons found in range. Are you sure this class exists and is active?
+		{:else}
 			{#each getSubjects(data) as su}
 				<label class="flex items-center space-x-2">
 					<input
@@ -36,9 +38,9 @@
 							else subjects.push(su.id);
 						}}
 					/>
-					<p>{su.name} ({su.longname})</p>
+					<p>{su.longname} ({su.name})</p>
 				</label>
 			{/each}
-		</div>
-	{/if}
+		{/if}
+	</div>
 {/await}

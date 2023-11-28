@@ -4,7 +4,7 @@
 	import ClassSelector from '$lib/components/ClassSelector.svelte';
 	import SubjectSelector from '$lib/components/SubjectSelector.svelte';
 	import SubjectTypeSelector from '$lib/components/SubjectTypeSelector.svelte';
-	import { Step, Stepper } from '@skeletonlabs/skeleton';
+	import { Step, Stepper, toastStore } from '@skeletonlabs/skeleton';
 
 	let classId: number | undefined;
 	let type: 'includedSubjects' | 'excludedSubjects' | undefined;
@@ -22,6 +22,11 @@
 		const url = `${PUBLIC_API_URL}/lessons/${classId}/ics`;
 		if (params.toString()) return url.concat('?', params.toString());
 		return url;
+	};
+
+	const copyToClipboard = (value: string) => {
+		toastStore.trigger({ message: 'Copied to clipboard!', background: 'variant-filled-primary' });
+		navigator.clipboard.writeText(value);
 	};
 
 	const getHolidayUrl = () => `${PUBLIC_API_URL}/holidays`;
@@ -57,18 +62,15 @@
 		<div class="input-group input-group-divider grid-cols-[auto_1fr_auto] mt-2 mb-4">
 			<div class="input-group-shim">ical://</div>
 			<input type="text" readonly value={getUrl()} />
-			<button
-				class="variant-filled-primary w-16"
-				on:click={() => navigator.clipboard.writeText(getUrl())}>Copy</button
+			<button class="variant-filled-primary" on:click={() => copyToClipboard(getUrl())}>Copy</button
 			>
 		</div>
 		Looking for a holiday calendar? Use the one below to get automatically updated future holidays.
 		<div class="input-group input-group-divider grid-cols-[auto_1fr_auto] my-2">
 			<div class="input-group-shim">ical://</div>
 			<input type="text" readonly value={getHolidayUrl()} />
-			<button
-				class="variant-filled-primary w-16"
-				on:click={() => navigator.clipboard.writeText(getHolidayUrl())}>Copy</button
+			<button class="variant-filled-primary" on:click={() => copyToClipboard(getHolidayUrl())}
+				>Copy</button
 			>
 		</div>
 
