@@ -3,7 +3,7 @@
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	import '../app.postcss';
 
-	import { AppBar, AppShell, LightSwitch, Modal, Toast } from '@skeletonlabs/skeleton';
+	import { AppBar, AppShell, Modal, Toast } from '@skeletonlabs/skeleton';
 </script>
 
 <svelte:head>
@@ -15,9 +15,6 @@
 		<AppBar>
 			<svelte:fragment slot="lead">
 				<h1 class="font-extrabold text-xl">&#9200; Untis ICS Sync</h1>
-			</svelte:fragment>
-			<svelte:fragment slot="trail">
-				<LightSwitch />
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
