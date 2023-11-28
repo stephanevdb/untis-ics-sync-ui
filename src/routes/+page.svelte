@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { PUBLIC_API_URL } from '$env/static/public';
-	import AlertsSelector from '$lib/components/AlertsSelector.svelte';
+	import AlarmsSelector from '$lib/components/AlarmsSelector.svelte';
 	import ClassSelector from '$lib/components/ClassSelector.svelte';
 	import SubjectSelector from '$lib/components/SubjectSelector.svelte';
 	import SubjectTypeSelector from '$lib/components/SubjectTypeSelector.svelte';
@@ -44,7 +44,10 @@
 			</Step>
 			<Step>
 				<svelte:fragment slot="header">Step 2: Select subjects (optional)</svelte:fragment>
-				Only following a few subjects of a class? Feel free to include or exclude them here.
+				Only following a few subjects of a class? Feel free to include or exclude them here. Watch out
+				when using the 'include only' option. In the case that a subject gets added, you will
+				<b>not</b>
+				be notified in your calendar.
 				<SubjectTypeSelector bind:type />
 				<hr />
 				<SubjectSelector bind:classId bind:subjects />
@@ -54,7 +57,7 @@
 				Want to be notified before each lesson? Enter the desired amount of minutes before each subject
 				below and make sure "remove alarms" is disabled in your preferred calendar.
 				<hr class="mt-3" />
-				<AlertsSelector bind:alarms />
+				<AlarmsSelector bind:alarms />
 			</Step>
 		</Stepper>
 	{:else}
