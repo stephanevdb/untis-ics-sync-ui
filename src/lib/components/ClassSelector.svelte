@@ -8,17 +8,16 @@
 
 	let classes = GET('/classes', {});
 
-	const filterClasses = (classes: Class[]) => {
-		const filtered = classes
+	const filterClasses = (classes: Class[]) =>
+		classes
 			.filter(
 				(k) =>
 					k.name.toLowerCase().includes(filter.toLowerCase()) ||
 					k.longName.toLowerCase().includes(filter.toLowerCase())
 			)
 			.sort((k1, k2) => k1.name.localeCompare(k2.name));
-		classId = filtered.length > 0 ? filtered[0].id : -1;
-		return filtered;
-	};
+
+	const updateClass = (classes: Class[]) => (classId = classes.length > 0 ? classes[0].id : -1);
 </script>
 
 {#await classes}
@@ -31,7 +30,13 @@
 	{/if}
 	<label class="label">
 		<span>Search</span>
-		<input class="input" type="text" placeholder="Some class" bind:value={filter} />
+		<input
+			class="input"
+			type="text"
+			placeholder="Some class"
+			bind:value={filter}
+			on:keypress={() => updateClass(filterClasses(data))}
+		/>
 	</label>
 	<label class="label">
 		<span>Target class</span>
