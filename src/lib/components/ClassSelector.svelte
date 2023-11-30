@@ -8,14 +8,17 @@
 
 	let classes = GET('/classes', {});
 
-	const filterClasses = (classes: Class[]) =>
-		classes
+	const filterClasses = (classes: Class[]) => {
+		const filtered = classes
 			.filter(
 				(k) =>
 					k.name.toLowerCase().includes(filter.toLowerCase()) ||
 					k.longName.toLowerCase().includes(filter.toLowerCase())
 			)
 			.sort((k1, k2) => k1.name.localeCompare(k2.name));
+		classId = filtered.length > 0 ? filtered[0].id : -1;
+		return filtered;
+	};
 </script>
 
 {#await classes}
