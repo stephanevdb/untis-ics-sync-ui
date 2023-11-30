@@ -62,19 +62,25 @@
 		</Stepper>
 	{:else}
 		That's it! Use the link below to subscribe to your personalized calendar.
-		<div class="input-group input-group-divider grid-cols-[auto_1fr_auto] mt-2 mb-4">
-			<div class="input-group-shim">ical://</div>
-			<input type="text" readonly value={getUrl()} />
-			<button class="variant-filled-primary" on:click={() => copyToClipboard(getUrl())}>Copy</button
-			>
+		<div class="flex gap-2 mt-2 mb-4">
+			<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+				<div class="input-group-shim">ical://</div>
+				<input class="overflow-hidden truncate" type="text" readonly value={getUrl()} />
+			</div>
+			<button class="btn variant-filled-primary" on:click={() => copyToClipboard(getUrl())}>
+				Copy
+			</button>
 		</div>
 		Looking for a holiday calendar? Use the one below to get automatically updated future holidays.
-		<div class="input-group input-group-divider grid-cols-[auto_1fr_auto] my-2">
-			<div class="input-group-shim">ical://</div>
-			<input type="text" readonly value={getHolidayUrl()} />
-			<button class="variant-filled-primary" on:click={() => copyToClipboard(getHolidayUrl())}
-				>Copy</button
-			>
+		<div class="flex gap-2 my-2">
+			<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
+				<div class="input-group-shim">ical://</div>
+				<input class="overflow-hidden truncate" type="text" readonly value={getHolidayUrl()} />
+			</div>
+
+			<button class="btn variant-filled-primary" on:click={() => copyToClipboard(getHolidayUrl())}>
+				Copy
+			</button>
 		</div>
 
 		<button
